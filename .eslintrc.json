@@ -2,12 +2,10 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "plugins": [
+    "import",
     "@typescript-eslint",
     "react",
     "react-hooks"
-  ],
-  "extends": [
-    "airbnb-typescript"
   ],
   "parserOptions": {
     "project": ["src/tsconfig.json", "service-worker/tsconfig.json"],
@@ -17,9 +15,5 @@
     "react": {
       "version": "detect"
     }
-  },
-  "rules": {
-    "no-plusplus": "off",
-    "no-underscore-dangle": "off"
   }
 }

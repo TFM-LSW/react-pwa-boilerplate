@@ -15,6 +15,7 @@ module.exports = (env, argv) => {
   }
 
   return {
+    // context: __dirname, // to automatically find tsconfig.json
     entry: './src/index.tsx',
     devtool: 'source-map',
     module: {
@@ -32,11 +33,11 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.tsx?$/,
-          enforce: 'pre',
+          // enforce: 'pre',
           include: [path.resolve(__dirname, './src'), path.resolve(__dirname, './service-worker')],
-          use: [
+          /* use: [
             { loader: 'eslint-loader', options: { emitErrors: true } },
-          ],
+          ], */
         },
         // Loader for TypeScript files in ./src
         {
@@ -53,6 +54,7 @@ module.exports = (env, argv) => {
               options: {
                 ...tsConfigOptions,
                 configFile: path.resolve(__dirname, './src/tsconfig.json'),
+                transpileOnly: true
               }
             },
           ]
@@ -97,24 +99,28 @@ module.exports = (env, argv) => {
         ],
       }),
 
-      new webpack.HotModuleReplacementPlugin(),
+      // new webpack.HotModuleReplacementPlugin(), // not needed
+
       ...(isProduction ? [
         new InjectManifest({
           swSrc: path.resolve(__dirname, './service-worker/serviceWorkerWorkbox.ts'),
           swDest: 'service-worker.js',
         }),
       ] : [
+        // Speeds up TypeScript type checking and ESLint linting by moving each to a separate process
         new ForkTsCheckerWebpackPlugin({
-          tsconfig: path.resolve(__dirname, './src/tsconfig.json'),
+          eslint: {
+            enabled: true,
+            files: './src/**/*.{ts,tsx,js,jsx}' // required - same as command `eslint ./src/**/*.{ts,tsx,js,jsx} --ext .ts,.tsx,.js,.jsx`
+          }
         }),
       ]),
     ],
     devServer: {
       port: 5000,
       open: true,
-      inline: true,
       compress: false,
-      hot: true,
+      // hot: true,
     },
   };
 };

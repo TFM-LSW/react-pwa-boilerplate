@@ -103,7 +103,7 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
     });
 }
 
-export function register(config?: Config) {
+export function register(config?: Config): void {
   window.addEventListener('load', () => {
     const swUrl = '/service-worker.js';
 
@@ -127,7 +127,7 @@ export function register(config?: Config) {
   });
 }
 
-export function unregister() {
+export function unregister(): void {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready.then((registration) => {
       registration.unregister();
