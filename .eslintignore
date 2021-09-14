@@ -1,3 +1,4 @@
 node_modueles
 dist
 webpack.config.js
+src/index.tsx

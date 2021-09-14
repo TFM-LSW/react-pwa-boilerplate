@@ -4,6 +4,9 @@ const path = require("path");
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WebpackRemoteTypesPlugin = require('webpack-remote-types-plugin').default;
+const ModuleFederationPlugin =
+  require("webpack").container.ModuleFederationPlugin;
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
@@ -16,7 +19,7 @@ module.exports = (env, argv) => {
 
   return {
     // context: __dirname, // to automatically find tsconfig.json
-    entry: './src/index.tsx',
+    entry: './src/index',
     devtool: 'source-map',
     module: {
       rules: [
@@ -38,6 +41,13 @@ module.exports = (env, argv) => {
           /* use: [
             { loader: 'eslint-loader', options: { emitErrors: true } },
           ], */
+        },
+        {
+          test: /bootstrap\.tsx$/,
+          loader: "bundle-loader",
+          options: {
+            lazy: true,
+          },
         },
         // Loader for TypeScript files in ./src
         {
@@ -84,10 +94,24 @@ module.exports = (env, argv) => {
       extensions: [ '.tsx', '.ts', '.js' ],
     },
     output: {
-      path: path.resolve(__dirname, './dist'),
-      publicPath: '/',
+      // path: path.resolve(__dirname, './dist'),
+      publicPath: 'auto',
     },
     plugins: [
+      new WebpackRemoteTypesPlugin({
+        remotes: {
+          app2: "app2@http://localhost:3002/remoteEntry.js",
+        },
+        outputDir: 'remote-types', // supports [name] as the remote name
+        remoteFileName: '[name]-dts.tgz' // default filename is [name]-dts.tgz where [name] is the remote name, for example, `app` with the above setup
+      }),
+      new ModuleFederationPlugin({
+        name: "app1",
+        remotes: {
+          app2: "app2@http://localhost:3002/remoteEntry.js",
+        },
+        shared: {"react": { requiredVersion: '17.0.2', eager: true, singleton: true }, "react-dom": { requiredVersion: '17.0.2', eager: true, singleton: true }},
+      }),
       new HtmlWebpackPlugin({
         filename: 'index.html',
         template: './index.html',
@@ -103,8 +127,15 @@ module.exports = (env, argv) => {
 
       ...(isProduction ? [
         new InjectManifest({
-          swSrc: path.resolve(__dirname, './service-worker/serviceWorkerWorkbox.ts'),
+          swSrc: path.join(process.cwd(), './service-worker/serviceWorkerWorkbox.ts'),
           swDest: 'service-worker.js',
+          exclude: [
+            /\.map$/,
+            /manifest$/,
+            /\.htaccess$/,
+            /service-worker\.js$/,
+            /sw\.js$/,
+          ],
         }),
       ] : [
         // Speeds up TypeScript type checking and ESLint linting by moving each to a separate process
@@ -117,7 +148,10 @@ module.exports = (env, argv) => {
       ]),
     ],
     devServer: {
-      port: 5000,
+      static: {
+        directory: path.join(__dirname, "dist"),
+      },
+      port: 3001,
       open: true,
       compress: false,
       // hot: true,

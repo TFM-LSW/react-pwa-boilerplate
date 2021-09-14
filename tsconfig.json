@@ -12,21 +12,21 @@
     "noImplicitAny": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "module": "esnext",
-    "lib": ["es6", "dom", "es2017", "esnext.intl", "es2017.intl", "es2018.intl","ScriptHost"],
-    "target": "ES6",
-    "jsx": "react",
+    "lib": ["es6", "dom", "dom.iterable", "es2017", "esnext.intl", "es2017.intl", "es2018.intl","ScriptHost"],
+    "target": "es5",
+    "jsx": "react-jsx",
     "esModuleInterop": true,
     "typeRoots": [
       "./node_modules/@types"
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "*": ["*", "src/*", "types/*", "remote-types/*"],
     }
   },
-  "include": ["./src"],
+  "include": ["src/**/*"],
   "exclude": [
     "./dist",
     "./node_modules"
@@ -34,5 +34,6 @@
   "references": [
     { "path": "./service-worker" },
     { "path": "./src" }
-  ]
+  ],
+  "strictFunctionTypes": false,
 }
