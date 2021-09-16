@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 const { InjectManifest } = require("workbox-webpack-plugin");
 const path = require("path");
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -19,7 +20,7 @@ module.exports = (env, argv) => {
 
   return {
     // context: __dirname, // to automatically find tsconfig.json
-    entry: './src/index',
+    entry: './src/index.tsx',
     devtool: 'source-map',
     module: {
       rules: [
@@ -34,14 +35,14 @@ module.exports = (env, argv) => {
             'sass-loader',
           ],
         },
-        {
+        /* {
           test: /\.tsx?$/,
           // enforce: 'pre',
           include: [path.resolve(__dirname, './src'), path.resolve(__dirname, './service-worker')],
-          /* use: [
+          use: [
             { loader: 'eslint-loader', options: { emitErrors: true } },
-          ], */
-        },
+          ],
+        }, */
         {
           test: /bootstrap\.tsx$/,
           loader: "bundle-loader",
@@ -64,7 +65,7 @@ module.exports = (env, argv) => {
               options: {
                 ...tsConfigOptions,
                 configFile: path.resolve(__dirname, './src/tsconfig.json'),
-                transpileOnly: true
+                transpileOnly: false
               }
             },
           ]
@@ -95,9 +96,32 @@ module.exports = (env, argv) => {
     },
     output: {
       // path: path.resolve(__dirname, './dist'),
-      publicPath: 'auto',
+      publicPath: '/',
     },
     plugins: [
+      new WorkboxPlugin.GenerateSW({
+        // Do not precache images
+        exclude: [/\.(?:png|jpg|jpeg|svg)$/],
+  
+        // Define runtime caching rules.
+        runtimeCaching: [{
+          // Match any request that ends with .png, .jpg, .jpeg or .svg.
+          urlPattern: /\.(?:png|jpg|jpeg|svg)$/,
+  
+          // Apply a cache-first strategy.
+          handler: 'CacheFirst',
+  
+          options: {
+            // Use a custom cache name.
+            cacheName: 'images',
+  
+            // Only cache 10 images.
+            expiration: {
+              maxEntries: 10,
+            },
+          },
+        }],
+      }),
       new WebpackRemoteTypesPlugin({
         remotes: {
           app2: "app2@http://localhost:3002/remoteEntry.js",
@@ -110,7 +134,7 @@ module.exports = (env, argv) => {
         remotes: {
           app2: "app2@http://localhost:3002/remoteEntry.js",
         },
-        shared: {"react": { requiredVersion: '17.0.2', eager: true, singleton: true }, "react-dom": { requiredVersion: '17.0.2', eager: true, singleton: true }},
+        shared: {"react": { requiredVersion: '17.0.2', strictVersion: true, singleton: true }, "react-dom": { requiredVersion: '17.0.2', strictVersion: true, singleton: true }},
       }),
       new HtmlWebpackPlugin({
         filename: 'index.html',
@@ -119,25 +143,13 @@ module.exports = (env, argv) => {
 
       new CopyWebpackPlugin({
         patterns: [
-          { from: path.resolve(__dirname, './public') },
+          { from: path.resolve(__dirname, './public') }
         ],
       }),
 
       // new webpack.HotModuleReplacementPlugin(), // not needed
 
-      ...(isProduction ? [
-        new InjectManifest({
-          swSrc: path.join(process.cwd(), './service-worker/serviceWorkerWorkbox.ts'),
-          swDest: 'service-worker.js',
-          exclude: [
-            /\.map$/,
-            /manifest$/,
-            /\.htaccess$/,
-            /service-worker\.js$/,
-            /sw\.js$/,
-          ],
-        }),
-      ] : [
+      ...(isProduction ? [] : [
         // Speeds up TypeScript type checking and ESLint linting by moving each to a separate process
         new ForkTsCheckerWebpackPlugin({
           eslint: {
@@ -151,10 +163,10 @@ module.exports = (env, argv) => {
       static: {
         directory: path.join(__dirname, "dist"),
       },
-      port: 3001,
+      port: 3003,
       open: true,
       compress: false,
-      // hot: true,
+      hot: true,
     },
   };
 };

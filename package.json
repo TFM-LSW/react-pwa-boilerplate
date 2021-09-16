@@ -49,7 +49,7 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
     "build": "npx webpack --config ./webpack.config.js --progress --mode production",
-    "serve": "npx serve -s ./dist -l 8000",
+    "serve": "npx serve -s ./dist -l 3001",
     "lint": "npx eslint",
     "lint:fix": "npx eslint src --fix"
   },
