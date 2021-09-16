@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.scss';
 
-const RemoteButton = React.lazy(() => import("app2/Button"));
+const RemoteButton = React.lazy(() => import('app2/Button'));
 
 const App = (): JSX.Element => (
   <div className="app">
@@ -9,7 +9,7 @@ const App = (): JSX.Element => (
     <p>{process.env.NODE_ENV}</p>
 
     <React.Suspense fallback="Loading Button">
-      <RemoteButton id="1"/>
+      <RemoteButton id="1" />
     </React.Suspense>
   </div>
 );
