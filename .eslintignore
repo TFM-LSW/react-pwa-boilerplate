@@ -1,4 +1,4 @@
 node_modueles
 dist
-webpack.config.js
+build-utils
 src/index.tsx

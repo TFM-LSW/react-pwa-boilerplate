@@ -6,6 +6,7 @@ const RemoteButton = React.lazy(() => import("app2/Button"));
 const App = (): JSX.Element => (
   <div className="app">
     <h1>Host App</h1>
+    <p>{process.env.NODE_ENV}</p>
 
     <React.Suspense fallback="Loading Button">
       <RemoteButton id="1"/>
