@@ -51,7 +51,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --config ./build-utils/webpack.config.js --env env=development",
-    "build": "npx webpack --config ./build-utils/webpack.config.js --env env=production --progress",
+    "build": "webpack --config ./build-utils/webpack.config.js --env env=production --progress",
     "serve": "npx serve -s ./dist -l 3000",
     "lint": "npx eslint",
     "lint:fix": "npx eslint src --fix"
