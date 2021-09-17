@@ -1,5 +1,4 @@
 node_modules
 dist
-build-utils
 .env.development
 .nev.production
