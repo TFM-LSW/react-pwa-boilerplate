@@ -1,5 +1,6 @@
 {
   "name": "react-pwa-boilerplate",
+  "license": "UNLICENSED",
   "version": "0.0.1",
   "description": "",
   "keywords": [],
@@ -49,8 +50,8 @@
     "workbox-webpack-plugin": "^6.3.0"
   },
   "scripts": {
-    "start": "webpack-dev-server --config build-utils/webpack.config.js --env env=development",
-    "build": "npx webpack --config build-utils/webpack.config.js --env env=production --progress",
+    "start": "webpack-dev-server --config ./build-utils/webpack.config.js --env env=development",
+    "build": "npx webpack --config ./build-utils/webpack.config.js --env env=production --progress",
     "serve": "npx serve -s ./dist -l 3000",
     "lint": "npx eslint",
     "lint:fix": "npx eslint src --fix"
