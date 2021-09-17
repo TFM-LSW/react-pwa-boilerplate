@@ -78,7 +78,7 @@ module.exports = {
     }),
     new WebpackRemoteTypesPlugin({
       remotes: {
-        app2: "app2@https://unruffled-franklin-ac6ac5.netlify.app/remoteEntry.js",
+        app2: "app2@https://de-common-ui.netlify.app/remoteEntry.js",
       },
       outputDir: 'remote-types', // supports [name] as the remote name
       remoteFileName: '[name]-dts.tgz' // default filename is [name]-dts.tgz where [name] is the remote name, for example, `app` with the above setup
@@ -86,7 +86,7 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "app1",
       remotes: {
-        app2: "app2@https://unruffled-franklin-ac6ac5.netlify.app/remoteEntry.js",
+        app2: "app2@https://de-common-ui.netlify.app/remoteEntry.js",
       },
       shared: {
         "react": { 
