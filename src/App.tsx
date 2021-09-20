@@ -1,6 +1,6 @@
 import React from 'react';
 import sum from './services/sum';
-import './styles.scss';
+import './App.scss';
 
 const RemoteButton = React.lazy(() => import('app2/Button'));
 
