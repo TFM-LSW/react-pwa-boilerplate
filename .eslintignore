@@ -2,3 +2,5 @@ node_modueles
 dist
 build-utils
 src/index.tsx
+jest.config.js
+.eslintrc.js

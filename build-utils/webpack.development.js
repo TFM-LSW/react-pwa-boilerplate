@@ -54,6 +54,7 @@ module.exports = {
       },
     ]
   },
+  preset: "ts-jest",
   plugins: [
     new Dotenv({
       path: path.resolve(__dirname, '..', './.env.development'),
