@@ -67,9 +67,9 @@ module.exports = {
     }),
     new ModuleFederationPlugin({
       name: "app1",
-      remotes: {
+      /* remotes: {
         app2: "app2@https://de-common-ui.netlify.app/remoteEntry.js",
-      },
+      }, */
       shared: {
         "react": { 
           requiredVersion: '17.0.2',

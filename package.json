@@ -1,7 +1,8 @@
 {
-  "name": "react-pwa-boilerplate",
+  "name": "@react-pwa-boilerplate/app1",
   "license": "UNLICENSED",
   "version": "0.0.1",
+  "private": true,
   "description": "",
   "keywords": [],
   "main": "./src/index.tsx",
