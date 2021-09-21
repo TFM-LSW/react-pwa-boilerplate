@@ -3,7 +3,6 @@ const Dotenv = require('dotenv-webpack');
 const path = require("path");
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackRemoteTypesPlugin = require('webpack-remote-types-plugin').default;
 const ModuleFederationPlugin = require("webpack").container.ModuleFederationPlugin;
 
@@ -86,14 +85,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       // title: 'Hello Webpack bundled JavaScript Project',
       filename: 'index.html',
-      template: './index.html',
+      template: './index-dev.html',
     }),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: path.resolve(__dirname, '..', './public') }
-      ],
-    }),
-
     // new webpack.HotModuleReplacementPlugin(), // not needed
     // Speeds up TypeScript type checking and ESLint linting by moving each to a separate process
     new ForkTsCheckerWebpackPlugin({

@@ -4,6 +4,7 @@ module.exports = {
     project: './src/tsconfig.json'
   },
   rules: {
-    'no-console': 0
+    'no-console': 0,
+    'react/jsx-curly-spacing': [1, 'always']
   }
 }

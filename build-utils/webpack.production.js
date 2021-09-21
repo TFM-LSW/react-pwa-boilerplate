@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const path = require("path");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackRemoteTypesPlugin = require('webpack-remote-types-plugin').default;
 const ModuleFederationPlugin = require("webpack").container.ModuleFederationPlugin;
 
@@ -100,6 +101,11 @@ module.exports = {
           singleton: true
         }
       },
-    })
+    }),
+    new HtmlWebpackPlugin({
+      // title: 'Hello Webpack bundled JavaScript Project',
+      filename: 'index.html',
+      template: './index-prod.html',
+    }),
   ]
 };
